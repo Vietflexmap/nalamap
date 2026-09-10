@@ -19,6 +19,8 @@ elif llm_provider == "mistral":
     from .mistralai import get_llm
 elif llm_provider == "deepseek":
     from .deepseek import get_llm  # noqa: F401
+elif llm_provider == "glm":
+    from .glm import get_llm  # noqa: F401
 elif llm_provider == "anthropic":
     from .anthropic import get_llm  # noqa: F401
 elif llm_provider == "moonshot":
@@ -44,7 +46,7 @@ def get_llm_for_provider(
     """Get LLM instance and capabilities for a specific provider with validated max_tokens.
 
     Args:
-        provider_name: Provider identifier (openai, azure, google, mistral, deepseek)
+        provider_name: Provider identifier (openai, azure, google, mistral, deepseek, glm)
         max_tokens: Maximum tokens to generate (will be validated against model's limit)
         model_name: Specific model to use (optional, provider-specific default if not provided)
 
@@ -86,6 +88,11 @@ def get_llm_for_provider(
 
         llm = deepseek_get_llm(max_tokens=validated_max_tokens, model_name=model_name)
         return llm, capabilities
+    elif provider_name == "glm":
+        from .glm import get_llm as glm_get_llm
+
+        llm = glm_get_llm(max_tokens=validated_max_tokens, model_name=model_name)
+        return llm, capabilities
     elif provider_name == "anthropic":
         from .anthropic import get_llm as anthropic_get_llm
 
@@ -105,7 +112,7 @@ def get_llm_for_provider(
         raise ValueError(
             f"Unsupported LLM provider: {provider_name}. "
             "Supported providers: openai, azure, google, mistral, deepseek, "
-            "anthropic, moonshot, xai"
+            "glm, anthropic, moonshot, xai"
         )
 
 
@@ -137,6 +144,8 @@ def _validate_max_tokens_and_get_capabilities(
             from .mistralai import get_available_models
         elif provider_name == "deepseek":
             from .deepseek import get_available_models
+        elif provider_name == "glm":
+            from .glm import get_available_models
         elif provider_name == "anthropic":
             from .anthropic import get_available_models
         elif provider_name == "moonshot":

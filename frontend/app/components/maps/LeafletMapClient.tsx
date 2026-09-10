@@ -1511,7 +1511,15 @@ const Legend = memo(function Legend({
   );
 });
 
-export default function LeafletMapComponent() {
+type LeafletMapComponentProps = {
+  initialCenter?: [number, number];
+  initialZoom?: number;
+};
+
+export default function LeafletMapComponent({
+  initialCenter = [0, 0],
+  initialZoom = 2,
+}: LeafletMapComponentProps) {
   const basemap = useMapStore((state) => state.basemap);
   const layers = useLayerStore((state) => state.layers);
 
@@ -1637,8 +1645,8 @@ export default function LeafletMapComponent() {
     <div className="relative w-full h-full">
       <div className="absolute inset-0 z-0">
         <MapContainer
-          center={[0, 0]}
-          zoom={2}
+          center={initialCenter}
+          zoom={initialZoom}
           style={{ height: "100%", width: "100%" }}
           preferCanvas={false}
         >

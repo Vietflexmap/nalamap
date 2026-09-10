@@ -107,9 +107,13 @@ export function useNaLaMapAgent(apiUrl: string) {
     endpoint: "chat" | "search" | "geocode" | "geoprocess" | "ai-style",
     layerUrls: string[] = [],
     options?: { portal?: string; bboxWkt?: string },
+    queryOverride?: string,
   ) {
+    const query = queryOverride ?? chatInterfaceStore.input;
+    if (!query.trim()) return;
+
     const params = new URLSearchParams({
-      query: chatInterfaceStore.input,
+      query,
       endpoint,
     }); // unused at the moment? -> Move to Settingsstore
     chatInterfaceStore.setLoading(true);
@@ -148,10 +152,10 @@ export function useNaLaMapAgent(apiUrl: string) {
         const selectedLayers = useLayerStore
           .getState()
           .layers.filter((l) => l.selected);
-        appendHumanMessage(chatInterfaceStore.input);
+        appendHumanMessage(query);
         const payload: NaLaMapRequest = {
           messages: chatInterfaceStore.messages,
-          query: chatInterfaceStore.input,
+          query,
           geodata_last_results: chatInterfaceStore.geoDataList,
           geodata_layers: layerStore.layers,
           // global_geodata: layerStore.globalGeodata,
@@ -170,9 +174,9 @@ export function useNaLaMapAgent(apiUrl: string) {
         });
       } else if (endpoint === "ai-style") {
         // Handle AI styling endpoint
-        appendHumanMessage(chatInterfaceStore.input);
+        appendHumanMessage(query);
         const payload = {
-          query: chatInterfaceStore.input,
+          query,
           messages: chatInterfaceStore.messages,
           geodata_layers: layerStore.layers,
           geodata_last_results: chatInterfaceStore.geoDataList,
@@ -271,7 +275,11 @@ export function useNaLaMapAgent(apiUrl: string) {
   async function queryNaLaMapAgentStream(
     endpoint: "chat" = "chat",
     options?: { portal?: string; bboxWkt?: string },
+    queryOverride?: string,
   ) {
+    const query = queryOverride ?? chatInterfaceStore.input;
+    if (!query.trim()) return;
+
     chatInterfaceStore.setLoading(true);
     chatInterfaceStore.setIsStreaming(true);
     chatInterfaceStore.setError("");
@@ -303,11 +311,11 @@ export function useNaLaMapAgent(apiUrl: string) {
       const selectedLayers = useLayerStore
         .getState()
         .layers.filter((l) => l.selected);
-      appendHumanMessage(chatInterfaceStore.input);
+      appendHumanMessage(query);
 
       const payload: NaLaMapRequest = {
         messages: chatInterfaceStore.messages,
-        query: chatInterfaceStore.input,
+        query,
         geodata_last_results: chatInterfaceStore.geoDataList,
         geodata_layers: layerStore.layers,
         options: settingsObj, // Contains session_id for GeoServer layer lookup

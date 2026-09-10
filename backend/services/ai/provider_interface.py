@@ -139,6 +139,30 @@ def get_all_providers() -> Dict[str, ProviderInfo]:
             error_message=str(e),
         )
 
+    # GLM / Zhipu AI
+    try:
+        from services.ai import glm
+
+        is_available = glm.is_available()
+        models = glm.get_available_models() if is_available else []
+
+        providers_unordered["glm"] = ProviderInfo(
+            name="glm",
+            display_name="GLM (Zhipu AI)",
+            available=is_available,
+            models=models,
+            error_message=None if is_available else "API key not configured",
+        )
+    except Exception as e:
+        logger.warning(f"Failed to load GLM provider: {e}")
+        providers_unordered["glm"] = ProviderInfo(
+            name="glm",
+            display_name="GLM (Zhipu AI)",
+            available=False,
+            models=[],
+            error_message=str(e),
+        )
+
     # Anthropic
     try:
         from services.ai import anthropic

@@ -93,6 +93,7 @@ class TestProviderOrdering:
                 "google",
                 "mistral",
                 "deepseek",
+                "glm",
                 "anthropic",
                 "moonshot",
                 "xai",

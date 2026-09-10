@@ -32,7 +32,7 @@
     "enable_dynamic_tools": false,
     "tool_selection_strategy": "conservative",
     "message_management_mode": "summarize",
-    "_comment": "provider options: openai, azure, google, mistral, anthropic. Check /api/settings/options for available models.",
+    "_comment": "provider options: openai, azure, google, mistral, deepseek, glm, anthropic. Check /api/settings/options for available models.",
     "_comment_message_mgmt": "message_management_mode: 'summarize' (LLM-based, intelligent, default) or 'prune' (simple window truncation). Omit to use MESSAGE_MANAGEMENT_MODE env var."
   },
 

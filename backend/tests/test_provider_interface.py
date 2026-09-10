@@ -150,7 +150,7 @@ class TestProviderInterface:
         """Test that get_all_providers returns all expected providers."""
         providers = get_all_providers()
 
-        expected_providers = ["openai", "azure", "google", "mistral", "deepseek"]
+        expected_providers = ["openai", "azure", "google", "mistral", "deepseek", "glm"]
 
         for provider_name in expected_providers:
             assert provider_name in providers, f"Provider {provider_name} not found"
